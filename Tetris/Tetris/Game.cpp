@@ -56,24 +56,16 @@ void Game::update()
 	{
 		Point point;// = piece.a[1]; //=a[1]; //center of rotation
 		copy(point,piece);
-		//piece.rotation(point);
-		for (int i = 0; i < 4; i++)
-		{
-			int x = piece.a[i].y - point.y;
-			int y = piece.a[i].x - point.x;
-			piece.a[i].x = point.x - x;
-			piece.a[i].y = point.y + y;
-		}
+		piece.rotation(point);
 	}
 
 	int n = 3;
-	if (piece.a[0].x == 0)
-		for (int i = 0; i < 4; i++)
-		{
-			piece.a[i].x = figures[n][i] % 2;
-			piece.a[i].y = figures[n][i] / 2;
-		}
 
+	if (piece.a[0].x == 0)
+	{
+		piece.construct(n); // i dont know what it does XD
+	}
+		
 	piece.dx = 0;
 	piece.rotate = 0;	
 }
@@ -84,7 +76,7 @@ void Game::render()
 
 	for (int i = 0; i < 4; i++)
 	{
-		piece.setPosition(piece.a[i].x * 50, piece.a[i].y * 50);
+		piece.setPosition(piece.a[i].x * BLOCK_SIZE, piece.a[i].y * BLOCK_SIZE);
 		window.draw(piece);
 	}
 
