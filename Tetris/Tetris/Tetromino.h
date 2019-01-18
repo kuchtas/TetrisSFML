@@ -1,4 +1,4 @@
-#ifndef _TETROMINO_H
+#ifndef _TETROMINO_H_
 #define _TETROMINO_H_
 #include <SFML/Graphics.hpp>
 #include "Point.h"
