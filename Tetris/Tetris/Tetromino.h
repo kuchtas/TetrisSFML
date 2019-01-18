@@ -25,6 +25,7 @@ public:
 	int dx = 0;
 	int rotate = false;
 	int colorNum = 1;
+	int type = rand() % 7;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	
@@ -33,5 +34,7 @@ public:
 
 	void rotation(Point);
 	void construct(int);
+	void create();
+	void lower();
 };
 #endif

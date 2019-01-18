@@ -13,23 +13,23 @@ private:
 	sf::Clock clock;
 	float time;
 	float timer = 0, delay = 0.6;
-	int field[32][16] = { 0 }; //[M][N]
+	int field[HEIGHT_IN_BLOCKS][WIDTH_IN_BLOCKS] = { 0 }; 
 
 	void processEvents();
 	void update();
 	void render();
 
-
 public:
 	Point a[4],b[4];
-
 
 	Game();
 	~Game();
 	void run();
 	
 	void copy(Point&, Tetromino);
-	bool check();
+	bool check_collisions();
+	void linecheck();
+	void gameover();
 };
 
 #endif 
