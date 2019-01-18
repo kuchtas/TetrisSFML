@@ -53,7 +53,7 @@ void Game::update()
 		piece.b[i] = piece.a[i];
 		piece.a[i].x += piece.dx;
 	}
-	if (!check_collisions())
+	if (!board.check_collisions(piece))
 	{
 		for (int i = 0; i < 4; i++)
 		{
@@ -64,9 +64,10 @@ void Game::update()
 	if (piece.rotate) //if up arrow has been pressed
 	{
 		Point point;
-		copy(point,piece);
+	//	copy(point,piece);
+		point.copy(piece);
 		piece.rotation(point);
-		if (!check_collisions())
+		if (!board.check_collisions(piece))
 		{	
 			for (int i = 0; i < 4; i++)
 			{
@@ -78,20 +79,20 @@ void Game::update()
 	if (timer > delay) //the piece changes it's position after set amount of time
 	{
 		piece.lower(); //makes the Tetromino go down by one block 
-		if (!check_collisions()) 
+		if (!board.check_collisions(piece)) 
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				field[piece.b[i].y][piece.b[i].x] = piece.colorNum; //piece places itself, we lose control over it
+				board.field[piece.b[i].y][piece.b[i].x] = piece.colorNum; //piece places itself, we lose control over it
 			}
 			piece.create(); //we need to create a new Tetromino 
 		}
 		timer = 0; //reseting the timer since the Tetromino moved 
 	}
 	///////CHECKING THE LINES//////
-	linecheck();
+	board.linecheck();
 	/////////GAME OVER/////////
-	gameover();
+	board.gameover(piece);
 		
 	piece.dx = 0;
 	piece.rotate = 0;	
@@ -106,7 +107,7 @@ void Game::render()
 	{
 		for (int j = 0; j < WIDTH_IN_BLOCKS; j++)
 		{
-			if (field[i][j] == 0) continue;
+			if (board.field[i][j] == 0) continue;
 			piece.setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
 			window.draw(piece);
 		}
@@ -119,43 +120,4 @@ void Game::render()
 	}
 	
 	window.display();
-}
-
-void Game::copy(Point& point, Tetromino piece)	//function copies the rotation point for each type of Tetromino
-{
-	point.x = piece.a[1].x;
-	point.y = piece.a[1].y;
-}
-
-bool Game::check_collisions()	//this functions checks if we are not outside of the game bounds or inside another block
-{
-	for (int i = 0; i < 4; i++)
-	{
-		if (piece.a[i].x < 0 || piece.a[i].x>=WIDTH_IN_BLOCKS || piece.a[i].y >= HEIGHT_IN_BLOCKS) return 0;
-		else if (field[piece.a[i].y][piece.a[i].x]) return 0;
-	}	
-	return 1;
-}
-
-void Game::linecheck()
-{
-	int k = HEIGHT_IN_BLOCKS - 1; 
-	for (int i = HEIGHT_IN_BLOCKS - 1; i > 0; i--)	//going through every row starting from the bottom
-	{
-		int count = 0;
-		for (int j = 0; j < WIDTH_IN_BLOCKS; j++)	//going through every collumn starting from the left
-		{
-			if (field[i][j]) count++;	//if a block is occupied we add one to the counter
-			field[k][j] = field[i][j];
-		}
-		if (count < WIDTH_IN_BLOCKS) k--;
-	}
-}
-
-void Game::gameover()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		if (field[piece.a[i].y][piece.a[i].x]) std::cout << "Game over"; //if any block is inside another the player has lost
-	}
 }
