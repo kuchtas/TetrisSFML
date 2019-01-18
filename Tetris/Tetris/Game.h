@@ -26,8 +26,6 @@ public:
 	Game();
 	~Game();
 	void run();
-	
-	void copy(Point&, Tetromino);
 };
 
 #endif 
