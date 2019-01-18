@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Point.h"
 #include "Constants.h"
+
 class Tetromino : public sf::Drawable, public sf::Transformable
 {
 private:
@@ -23,10 +24,12 @@ public:
 	~Tetromino();
 	int dx = 0;
 	int rotate = false;
+	int colorNum = 1;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	
 	Point a[4],b[4];
+
 
 	void rotation(Point);
 	void construct(int);
