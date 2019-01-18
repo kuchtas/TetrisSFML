@@ -3,7 +3,7 @@
 Tetromino::Tetromino()
 {
 	block.setSize(sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
-	block.setFillColor(sf::Color::Blue);
+	block.setFillColor((sf::Color(186, 85, 211))); //Purple
 	construct(type);
 }
 
