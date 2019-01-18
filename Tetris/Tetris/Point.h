@@ -1,5 +1,6 @@
 #pragma once
-struct Point
+class Point
 {
+public:
 	int x, y;
 };
