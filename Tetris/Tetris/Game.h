@@ -5,7 +5,8 @@
 #include "Tetromino.h"
 #include "Point.h"
 #include "Board.h"
-
+#include "Score.h"
+	
 class Game
 {
 private:
@@ -13,8 +14,10 @@ private:
 	sf::Clock clock;
 	Tetromino piece;
 	Board board;
+	Score score;
 	float time;
-	float timer = 0, delay = 0.6;
+	float timer = 0, delay = 0.5;
+	bool lost = false;
 
 	void processEvents();
 	void update();

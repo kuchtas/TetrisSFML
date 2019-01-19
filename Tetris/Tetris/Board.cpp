@@ -10,7 +10,7 @@ Board::~Board()
 {
 }
 
-void Board::linecheck()
+void Board::linecheck(Score& score)
 {
 	int k = HEIGHT_IN_BLOCKS - 1;
 	for (int i = HEIGHT_IN_BLOCKS - 1; i > 0; i--)	//going through every row starting from the bottom
@@ -19,18 +19,24 @@ void Board::linecheck()
 		for (int j = 0; j < WIDTH_IN_BLOCKS; j++)	//going through every collumn starting from the left
 		{
 			if (field[i][j]) count++;	//if a block is occupied we add one to the counter
+			if (count == WIDTH_IN_BLOCKS) score.addtoscore(); //player scores points for completing a full row
 			field[k][j] = field[i][j];
+			
 		}
 		if (count < WIDTH_IN_BLOCKS) k--;
 	}
 }
 
-void Board::gameover(Tetromino piece)
+bool Board::gameover(Tetromino piece)
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (field[piece.a[i].y][piece.a[i].x]) std::cout << "Game over"; //if any block is inside another the player has lost
+		if (field[piece.a[i].y][piece.a[i].x])//if any block is inside another the player has lost
+		{
+			return 0;
+		}
 	}
+	return 1;
 }
 
 bool Board::check_collisions(Tetromino piece)	//this functions checks if we are not outside of the game bounds or inside another block

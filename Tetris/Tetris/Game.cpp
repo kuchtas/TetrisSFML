@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <iostream>
 
 Game::Game(): window(sf::VideoMode(WIDTH, HEIGHT), "Tetris",sf::Style::Titlebar|sf::Style::Close)
 {
@@ -14,11 +13,17 @@ Game::~Game()
 
 void Game::run()
 {
-	while (window.isOpen())
+	while (window.isOpen()&&!lost)
 	{
 		processEvents();
 		update();
 		render();
+
+		if (lost)
+		{
+			score.streamscore();
+			score.resetscore();
+		}
 	}
 }
 
@@ -32,12 +37,20 @@ void Game::processEvents()
 		case sf::Event::Closed: window.close();
 			break;
 
+		case sf::Event::KeyReleased:
+			if (event.key.code == sf::Keyboard::Escape)
+			{
+				score.streamscore();
+				window.close();
+			}
+			break;
 		case sf::Event::KeyPressed:
-			if (event.key.code == sf::Keyboard::Escape)	window.close();
-			if (event.key.code == sf::Keyboard::Up)		piece.rotate = true;		
-			if (event.key.code == sf::Keyboard::Right)	piece.dx = 1;		
+			{
+			if (event.key.code == sf::Keyboard::Up)		piece.rotate = true;
+			if (event.key.code == sf::Keyboard::Right)	piece.dx = 1;
 			if (event.key.code == sf::Keyboard::Left)	piece.dx = -1;
 			break;
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) delay = 0.05;
 	}
@@ -47,6 +60,7 @@ void Game::update()
 	time= clock.getElapsedTime().asSeconds();
 	clock.restart();
 	timer += time;
+
 	///////MOVE///////
 	for (int i = 0; i < 4; i++)
 	{
@@ -60,11 +74,11 @@ void Game::update()
 			piece.a[i] = piece.b[i];
 		}
 	}
+
 	////ROTATE////
 	if (piece.rotate) //if up arrow has been pressed
 	{
 		Point point;
-	//	copy(point,piece);
 		point.copy(piece);
 		piece.rotation(point);
 		if (!board.check_collisions(piece))
@@ -75,6 +89,7 @@ void Game::update()
 			}
 		}
 	}
+
 	/////TICK/////
 	if (timer > delay) //the piece changes it's position after set amount of time
 	{
@@ -89,14 +104,19 @@ void Game::update()
 		}
 		timer = 0; //reseting the timer since the Tetromino moved 
 	}
+
 	///////CHECKING THE LINES//////
-	board.linecheck();
+	board.linecheck(score);
+
 	/////////GAME OVER/////////
-	board.gameover(piece);
+	if (!board.gameover(piece))
+	{
+		lost = true;
+	}
 		
-	piece.dx = 0;
-	piece.rotate = 0;	
-	delay = 0.3;
+	piece.dx = 0; //move only once per registered press
+	piece.rotate = 0;	//rotate only once per registered press
+	delay = 0.5; //set the delay back to initial value
 }
 
 void Game::render()
