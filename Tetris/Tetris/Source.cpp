@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "Menu.h"
 
 int main()
 {
-	srand(time(NULL));
-	Game game;
-	game.run();
-
+	Menu menu;
+	menu.start();
+	
 	return 0;
 }
