@@ -34,6 +34,7 @@ void Tetromino::construct(int n)
 	{
 		a[i].x = figures[n][i] % 2;
 		a[i].y = figures[n][i] / 2;
+		a[i].x += WIDTH_IN_BLOCKS/2-1; //the block shall spawn in the middle of the screen
 	}
 }
 
