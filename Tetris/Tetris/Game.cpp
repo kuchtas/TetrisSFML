@@ -1,9 +1,15 @@
 #include "Game.h"
-
 Game::Game(): window(sf::VideoMode(WIDTH, HEIGHT), "Tetris",sf::Style::Titlebar|sf::Style::Close)
 {
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(true);
+	try
+	{
+		font.loadFromFile("ARCADECLASSIC.ttf");
+	}
+	catch (sf::Font font)
+	{
+	}
 }
 
 Game::~Game()
@@ -11,19 +17,47 @@ Game::~Game()
 	window.close();
 }
 
+void Game::GameOver(sf::Font font, sf::Text GameOver) //GAME OVER SCREEN
+{
+	window.clear(sf::Color::Black);
+
+	GameOver.setFont(font);
+	GameOver.setCharacterSize(30);
+	GameOver.setPosition(WIDTH/13.5 , HEIGHT / 4);
+	GameOver.setString("\nYour  score  has  been\n    saved  to  the  file!\n       Maybe  try  again\n\n         Press  Enter  to\n       go  back  to  menu!");
+	window.draw(GameOver);
+	window.display();
+}
+
 void Game::run()
 {
-	while (window.isOpen()&&!lost)
+	while (window.isOpen())
 	{
-		processEvents();
-		update();
-		render();
-
-		if (lost)
+		if(!lost) processEvents();
+		if(!lost) update();
+		else
 		{
-			score.streamscore();
-			score.resetscore();
+			GameOver(font, GameOverText);
+			lost = true;
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				switch (event.type)
+				{
+				case sf::Event::KeyReleased:
+
+					if (event.key.code == sf::Keyboard::Enter)
+					{
+						lost = false;
+						score.streamscore();
+						score.resetscore();
+						window.close();
+					}	
+					break;
+				}
+			}
 		}
+		if(!lost) render();
 	}
 }
 

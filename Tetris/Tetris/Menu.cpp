@@ -4,7 +4,7 @@ Menu::Menu(): menuWindow(sf::VideoMode(WIDTH, HEIGHT), "Tetris", sf::Style::Titl
 {
 	try
 	{
-		font.loadFromFile("arial.ttf");
+		font.loadFromFile("ARCADECLASSIC.ttf");
 	}
 	catch (sf::Font font)
 	{
@@ -12,14 +12,16 @@ Menu::Menu(): menuWindow(sf::VideoMode(WIDTH, HEIGHT), "Tetris", sf::Style::Titl
 	}
 
 	menu[0].setFont(font);
+	menu[0].setCharacterSize(50);
 	menu[0].setFillColor(sf::Color::Red);
 	menu[0].setString("PLAY");
-	menu[0].setPosition(sf::Vector2f(WIDTH / 3+30, HEIGHT / 4));
+	menu[0].setPosition(sf::Vector2f(WIDTH / 3+10, HEIGHT / 4));
 
 	menu[1].setFont(font);
+	menu[1].setCharacterSize(50);
 	menu[1].setFillColor(sf::Color::White);
 	menu[1].setString("EXIT");
-	menu[1].setPosition(sf::Vector2f(WIDTH / 3+30, HEIGHT / 3));
+	menu[1].setPosition(sf::Vector2f(WIDTH / 3+10, HEIGHT / 3));
 
 	selectedItemIndex = 0;
 }
@@ -106,7 +108,6 @@ void Menu::start()
 				break;
 			case sf::Event::Closed:
 				menuWindow.close();
-
 				break;
 
 			}

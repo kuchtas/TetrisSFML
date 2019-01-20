@@ -12,6 +12,8 @@ class Game
 private:
 	sf::RenderWindow window;
 	sf::Clock clock;
+	sf::Font font;
+	sf::Text GameOverText;
 	Tetromino piece;
 	Board board;
 	Score score;
@@ -22,7 +24,7 @@ private:
 	void processEvents();
 	void update();
 	void render();
-
+	void GameOver(sf::Font, sf::Text);
 public:
 	Point a[4],b[4];
 
